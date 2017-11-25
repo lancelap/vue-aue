@@ -4,6 +4,7 @@ import { arrToMap, mapToArr } from '../../helpers'
 export const articlesModule = {
   state: {
     loading: false,
+    loaded: false,
     loadedArticles: {},
     articles: {}
   },
@@ -14,13 +15,16 @@ export const articlesModule = {
     },
     [LOAD_ALL_ARTICLE + START] (state) {
       state.loading = true
+      state.loaded = false
     },
     [LOAD_ALL_ARTICLE + SUCCESS] (state, { articles }) {
       state.articles = articles
       state.loading = false
+      state.loaded = true
     },
     [LOAD_ALL_ARTICLE + FAIL] (state) {
       state.loading = false
+      state.loaded = false
     },
     [LOAD_ARTICLE + START] (state, { id }) {
       state.loadedArticles = {...state.loadedArticles, [id]: false}
@@ -34,7 +38,7 @@ export const articlesModule = {
     }
   },
   actions: {
-    loadArticles ({ commit }) {
+    loadArticles ({ dispatch, commit }) {
       commit(LOAD_ALL_ARTICLE + START)
 
       setTimeout(() => {
@@ -49,13 +53,13 @@ export const articlesModule = {
             response = arrToMap(response)
             commit(LOAD_ALL_ARTICLE + SUCCESS, {articles: response})
           })
-          .catch((error) => {
+          .catch(() => {
             commit(LOAD_ALL_ARTICLE + FAIL)
-            console.log(error)
+            dispatch('error404')
           })
       }, 1000)
     },
-    loadArticle ({ commit }, id) {
+    loadArticle ({ dispatch, commit }, id) {
       commit(LOAD_ARTICLE + START, { id })
 
       setTimeout(() => {
@@ -69,9 +73,9 @@ export const articlesModule = {
           .then((response) => {
             commit(LOAD_ARTICLE + SUCCESS, { article: response, id })
           })
-          .catch((error) => {
+          .catch(() => {
             commit(LOAD_ARTICLE + FAIL, { id })
-            console.log(error)
+            dispatch('error404')
           })
       }, 1000)
     }

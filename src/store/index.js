@@ -4,6 +4,7 @@ import { articlesModule } from './modules/articlesModule'
 import { commentsModule } from './modules/commentsModule'
 import { filters } from './modules/filters'
 import { mapToArr } from '../helpers'
+import { actions } from './actions'
 
 Vue.use(Vuex)
 
@@ -13,10 +14,8 @@ const store = new Vuex.Store({
     commentsModule,
     filters
   },
-  state: {
-  },
-  mutations: {
-  },
+  state: {},
+  mutations: {},
   getters: {
     filteredArticles (state, getters) {
       const { articles } = state.articlesModule
@@ -29,8 +28,7 @@ const store = new Vuex.Store({
       })
     }
   },
-  actions: {
-  }
+  actions
 })
 
 window.store = store

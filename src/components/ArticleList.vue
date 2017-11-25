@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     {{this.comments}}
-    <template v-if="loading">
+    <template v-if="loading || !loaded">
       <Loader/>
     </template>
     <template v-else>
@@ -33,6 +33,7 @@ export default {
   computed: {
     ...mapState({
       loading: state => state.articlesModule.loading,
+      loaded: state => state.articlesModule.loaded,
       comments: state => state.commentsModule.commentsPagination
     }),
     ...mapGetters({
@@ -51,7 +52,8 @@ export default {
       'loadArticles'
     ])
   },
-  created: function () {
+  mounted: function () {
+    if (this.loaded) return
     this.loadArticles()
   },
   components: { ArticleComponent, Loader }

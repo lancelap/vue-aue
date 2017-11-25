@@ -71,7 +71,7 @@ export const commentsModule = {
     },
     [LOAD_COMMENTS_FOR_PAGE + SUCCESS] (state, payload) {
       const { comments, total, page } = payload
-      console.log(Object.keys(comments), total, page)
+
       state.comments = Object.assign({}, state.comments, comments)
       state.total = total
       state.pagination = Object.assign(
@@ -87,7 +87,7 @@ export const commentsModule = {
     }
   },
   actions: {
-    loadComments ({ commit }, id) {
+    loadComments ({ dispatch, commit }, id) {
       commit(LOAD_ARTICLE_COMMENTS + START, { id })
 
       setTimeout(() => {
@@ -102,9 +102,9 @@ export const commentsModule = {
             response = arrToMap(response)
             commit(LOAD_ARTICLE_COMMENTS + SUCCESS, {comments: response, id})
           })
-          .catch((error) => {
+          .catch(() => {
             commit(LOAD_ARTICLE_COMMENTS + FAIL, { id })
-            console.log(error)
+            dispatch('error404')
           })
       }, 1000)
     },
@@ -116,7 +116,7 @@ export const commentsModule = {
         }
       })
     },
-    checkAndLoadCommentsForPage ({ commit, rootState }, page) {
+    checkAndLoadCommentsForPage ({ dispatch, commit, rootState }, page) {
       const { pagination } = rootState.commentsModule
       if (pagination[page] && (pagination[page].loading || pagination[page].ids)) {
         return
@@ -141,6 +141,7 @@ export const commentsModule = {
         .catch((error) => {
           commit(LOAD_COMMENTS_FOR_PAGE + FAIL)
           console.log(error)
+          dispatch('error404')
         })
       }, 1000)
     }
