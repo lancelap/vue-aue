@@ -18,7 +18,7 @@ export const articlesModule = {
       state.loaded = false
     },
     [LOAD_ALL_ARTICLE + SUCCESS] (state, { articles }) {
-      state.articles = articles
+      state.articles = Object.assign({}, state.articles, articles)
       state.loading = false
       state.loaded = true
     },
@@ -70,7 +70,7 @@ export const articlesModule = {
             commit(LOAD_ALL_ARTICLE + FAIL)
             dispatch('error404')
           })
-      }, 1000)
+      }, 500)
     },
     loadArticle ({ dispatch, commit }, id) {
       commit(LOAD_ARTICLE + START, { id })
@@ -93,6 +93,5 @@ export const articlesModule = {
       }, 1000)
     }
   },
-  getters: {
-  }
+  getters: {}
 }

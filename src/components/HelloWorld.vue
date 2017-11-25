@@ -1,9 +1,6 @@
 <template>
-  <div class="hello">
+  <div class="hello mt-4">
     <h1>{{ msg }}</h1>
-    {{ username }}
-    {{  this.$route.name }}
-    <h2>Essential Links</h2>
   </div>
 </template>
 
@@ -12,19 +9,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  },
-  beforeRouteUpdate (to, from, next) {
-    // обработка изменений параметров пути...
-    // не забудьте вызывать next()
-    console.log('@@@', from.query.username)
-    next()
-  },
-  computed: {
-    username () {
-      console.log(this.$route)
-      return this.$route.query.username
+      msg: 'Welcome to Vue.js App'
     }
   }
 }
@@ -34,6 +19,7 @@ export default {
 <style scoped>
 h1, h2 {
   font-weight: normal;
+  color: indigo;
 }
 
 ul {

@@ -46,7 +46,7 @@ export default {
     }
     next()
   },
-  created: function () {
+  mounted: function () {
     if (!this.loadedArticles[this.id]) {
       this.loadArticle(this.id)
     }
