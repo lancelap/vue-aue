@@ -1,4 +1,4 @@
-import { LOAD_ALL_ARTICLE, DELETE_ARTICLE, LOAD_ARTICLE, SUCCESS, START, FAIL } from '../mutation-types'
+import { LOAD_ALL_ARTICLE, DELETE_ARTICLE, LOAD_ARTICLE, SUCCESS, START, FAIL, ADD_COMMENT } from '../mutation-types'
 import { arrToMap, mapToArr } from '../../helpers'
 
 export const articlesModule = {
@@ -35,6 +35,19 @@ export const articlesModule = {
     },
     [LOAD_ARTICLE + FAIL] (state, { id }) {
       state.loadedArticles[id] = true
+    },
+    [ADD_COMMENT] (state, { idComment, comment }) {
+      console.log(idComment, comment, state.articles[comment.articleId])
+      const article = state.articles[comment.articleId]
+
+      if (article.comments) {
+        state.articles[comment.articleId].comments = article.comments.concat(idComment)
+      } else {
+        state.articles[comment.articleId] = {
+          ...article,
+          comments: [idComment]
+        }
+      }
     }
   },
   actions: {

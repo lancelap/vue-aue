@@ -10,39 +10,15 @@ export const commentsModule = {
     pagination: {}
   },
   mutations: {
-    [ADD_COMMENT] (state, { comment }) {
-      const idComment = guid()
-      console.log(state)
-      const article = state.articlesModule.articles[comment.articleId]
-
+    [ADD_COMMENT] (state, { idComment, comment }) {
+      console.log(idComment, comment)
       state.comments = {
         ...state.comments,
-        [article]: {
-          [idComment]: {
-            id: idComment,
-            text: comment.text,
-            user: comment.user
-          }
+        [idComment]: {
+          id: idComment,
+          text: comment.text,
+          user: comment.user
         }
-      }
-
-      if (article.comments) {
-        state.articles[comment.articleId].comments = article.comments.concat(idComment)
-      } else {
-        state.articles[comment.articleId] = {
-          ...article,
-          comments: [idComment]
-        }
-      }
-
-      function guid () {
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-          s4() + '-' + s4() + s4() + s4()
-      }
-      function s4 () {
-        return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1)
       }
     },
     [LOAD_ARTICLE_COMMENTS + START] (state, { id }) {
@@ -107,14 +83,6 @@ export const commentsModule = {
             dispatch('error404')
           })
       }, 1000)
-    },
-    addComment ({ commit, rootState }) {
-      commit({
-        type: ADD_COMMENT,
-        payload: {
-          commit
-        }
-      })
     },
     checkAndLoadCommentsForPage ({ dispatch, commit, rootState }, page) {
       const { pagination } = rootState.commentsModule
