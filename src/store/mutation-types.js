@@ -1,0 +1,20 @@
+export const START = '_START'
+export const FAIL = '_FAIL'
+export const SUCCESS = '_SUCCESS'
+
+export const DELETE_ARTICLE = 'DELETE_ARTICLE'
+
+export const LOAD_ALL_ARTICLE = 'LOAD_ALL_ARTICLE'
+
+export const LOAD_ARTICLE_COMMENTS = 'LOAD_ARTICLE_COMMENTS'
+
+export const LOAD_ALL_COMMENTS = 'LOAD_ALL_COMMENTS'
+
+export const LOAD_COMMENTS_FOR_PAGE = 'LOAD_COMMENTS_FOR_PAGE'
+
+export const LOAD_ARTICLE = 'LOAD_ARTICLE'
+
+export const ADD_COMMENT = 'ADD_COMMENT'
+
+export const CHANGE_DATE_RANGE = 'CHANGE_DATE_RANGE'
+export const CHANGE_SELECTED = 'CHANGE_SELECTED'
