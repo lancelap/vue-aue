@@ -8,10 +8,10 @@
         <router-link :to="{ path: '/filters' }" class="nav-link" active-class="active">Filters</router-link>
       </li>
       <li class="nav-item">
-        <router-link :to="{ path: '/articles' }" class="nav-link" active-class="active" exact>Articles</router-link>
+        <router-link :to="{ path: '/articles' }" class="nav-link" active-class="active">Articles</router-link>
       </li>
       <li class="nav-item">
-        <router-link :to="{ path: '/comments' }" class="nav-link" active-class="active" exact>Comments</router-link>
+        <router-link :to="{ path: '/comments' }" class="nav-link" active-class="active">Comments</router-link>
       </li>
     </ul>
     <router-view/>

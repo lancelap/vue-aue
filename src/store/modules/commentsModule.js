@@ -59,7 +59,15 @@ export const commentsModule = {
       state.loadedComments[id] = false
     },
     [LOAD_COMMENTS_FOR_PAGE + START] (state, page) {
-      console.log('@@@ page', page)
+      state.pagination = Object.assign(
+        {},
+        state.pagination,
+        {
+          [page]: {
+            loading: true
+          }
+        }
+      )
     },
     [LOAD_COMMENTS_FOR_PAGE + SUCCESS] (state, payload) {
       const { comments, total, page } = payload
@@ -108,31 +116,33 @@ export const commentsModule = {
         }
       })
     },
-    checkAndLoadCommentsForPage ({ commit, rootState }, payload) {
+    checkAndLoadCommentsForPage ({ commit, rootState }, page) {
       const { pagination } = rootState.commentsModule
-      if (pagination[payload.page] && (pagination[payload.page].loading || pagination[payload.page].ids)) {
+      if (pagination[page] && (pagination[page].loading || pagination[page].ids)) {
         return
       }
 
-      commit(LOAD_COMMENTS_FOR_PAGE + START, payload.page)
+      commit(LOAD_COMMENTS_FOR_PAGE + START, page)
 
-      fetch(`/api/comment?limit=5&offset=${(payload.page - 1) * 5}`)
-      .then((response) => {
-        if (response.status >= 400) {
-          throw new Error(response.statusText)
-        }
-        return response.json()
-      })
-      .then((response) => {
-        const { total } = response
-        const comments = arrToMap(response.records)
+      setTimeout(() => {
+        fetch(`/api/comment?limit=5&offset=${(page - 1) * 5}`)
+        .then((response) => {
+          if (response.status >= 400) {
+            throw new Error(response.statusText)
+          }
+          return response.json()
+        })
+        .then((response) => {
+          const { total } = response
+          const comments = arrToMap(response.records)
 
-        commit(LOAD_COMMENTS_FOR_PAGE + SUCCESS, { comments, total, page: payload.page })
-      })
-      .catch((error) => {
-        commit(LOAD_COMMENTS_FOR_PAGE + FAIL)
-        console.log(error)
-      })
+          commit(LOAD_COMMENTS_FOR_PAGE + SUCCESS, { comments, total, page: page })
+        })
+        .catch((error) => {
+          commit(LOAD_COMMENTS_FOR_PAGE + FAIL)
+          console.log(error)
+        })
+      }, 1000)
     }
   },
   getters: {

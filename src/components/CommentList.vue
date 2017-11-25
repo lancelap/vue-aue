@@ -1,11 +1,11 @@
 <template>
   <div>
-    <template v-if="loadingComments[articleId]">
+    <template v-if="loadingComments">
       <Loader />
     </template>
-    <template v-else>
+    <template v-else-if="!loadingComments && loadedComments">
       <ul class="list-group m-2">
-        <li class="list-group-item" v-for="comment in getArrComments(comments)" :key="comment.id">
+        <li class="list-group-item" v-for="comment in comments" :key="comment.id">
           <Comment :comment="comment"/>
         </li>
       </ul>
@@ -16,36 +16,21 @@
 <script>
 import Comment from '@/components/Comment'
 import Loader from '@/components/Loader'
-import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'CommentList',
   props: {
-    articleId: {
-      type: String
-    },
     comments: {
-      type: Array
+      type: Array,
+      require: true
+    },
+    loadedComments: {
+      type: Boolean
+    },
+    loadingComments: {
+      type: Boolean,
+      require: true
     }
-  },
-  computed: {
-    ...mapState({
-      loadingComments: state => state.commentsModule.loadingComments,
-      loadedComments: state => state.commentsModule.loadedComments
-    }),
-    ...mapGetters([
-      'getArrComments'
-    ])
-  },
-  methods: {
-    ...mapActions([
-      'loadComments'
-    ])
-  },
-  beforeMount: function () {
-    if (this.loadedComments[this.articleId] || this.loadingComments[this.articleId]) return
-
-    this.loadComments(this.articleId)
   },
   components: { Comment, Loader }
 }

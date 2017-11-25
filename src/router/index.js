@@ -35,8 +35,13 @@ export default new Router({
     },
     {
       path: '/comments',
+      redirect: '/comments/1'
+    },
+    {
+      path: '/comments/:page',
       name: 'comments',
-      component: CommentsPagination
+      component: CommentsPagination,
+      props: true
     },
     {
       path: '*',

@@ -8,7 +8,10 @@
         {{ this.isOpen ? 'Hide comments' : 'Show comments' }}
       </button>
       <template v-if="isOpen">
-        <CommentList :articleId="articleId" :comments="comments"/>
+        <CommentList
+          :loadingComments="loadingComments[articleId]"
+          :loadedComments="loadedComments[articleId]"
+          :comments="getArrComments(comments)"/>
       </template>
     </template>
     <template v-else>
@@ -20,20 +23,15 @@
 </template>
 
 <script>
-import Comment from '@/components/Comment'
 import CommentList from '@/components/CommentList'
 import UserForm from '@/components/UserForm'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'WrapperCommentList',
   data: function () {
     return {
       isOpen: false
-    }
-  },
-  methods: {
-    toggleOpen: function () {
-      this.isOpen = !this.isOpen
     }
   },
   props: {
@@ -44,6 +42,30 @@ export default {
       type: String
     }
   },
-  components: { Comment, UserForm, CommentList }
+  methods: {
+    ...mapActions([
+      'loadComments'
+    ]),
+    toggleOpen: function () {
+      this.isOpen = !this.isOpen
+    }
+  },
+  computed: {
+    ...mapState({
+      loadingComments: state => state.commentsModule.loadingComments,
+      loadedComments: state => state.commentsModule.loadedComments
+    }),
+    ...mapGetters([
+      'getArrComments'
+    ])
+  },
+  beforeUpdate: function () {
+    if (this.loadedComments[this.articleId] || this.loadingComments[this.articleId]) return
+
+    if (this.isOpen) {
+      this.loadComments(this.articleId)
+    }
+  },
+  components: { UserForm, CommentList }
 }
 </script>
